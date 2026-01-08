@@ -5,13 +5,11 @@ import { DashboardHome } from './DashboardHome';
 import { OSCESection } from './OSCESection'; 
 import { FlashcardSection } from './FlashcardSection'; 
 import { CBTSection } from './CBTSection'; 
-import { AdminDashboard } from '../admin/AdminDashboard'; 
+import { AdminDashboard } from '../admin/AdminDashboard'; // Import Baru
 import { X } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { PomodoroWidget } from './PomodoroWidget';
-import { OnboardingTour } from './OnboardingTour';
 
-// Definisikan tipe lokal di sini agar tidak perlu mengimpor dari file luar yang sedang error
 type ToastType = 'success' | 'error' | 'info';
 
 interface AppContainerProps {
@@ -25,12 +23,11 @@ export const AppContainer = ({ isDarkMode, toggleDarkMode, onLogout }: AppContai
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isPro, setIsPro] = useState(true); 
 
-  // Fallback function menggunakan alert standar browser agar build stabil
   const handleAddToast = (msg: string, type: ToastType) => {
     if (type === 'error') {
-      alert(`⚠️ Error: ${msg}`);
+      alert(`⚠️ ${msg}`);
     } else {
-      alert(`✅ Success: ${msg}`);
+      alert(`✅ ${msg}`);
     }
   };
 
@@ -40,8 +37,7 @@ export const AppContainer = ({ isDarkMode, toggleDarkMode, onLogout }: AppContai
       case 'osce': return <OSCESection isPro={isPro} />; 
       case 'cbt': return <CBTSection isPro={isPro} addToast={handleAddToast} />; 
       case 'flashcards': return <FlashcardSection isPro={isPro} addToast={handleAddToast} />; 
-      // @ts-ignore - Mengabaikan cek tipe data sementara untuk AdminDashboard
-      case 'admin': return <AdminDashboard setView={setCurrentView} addToast={handleAddToast} />; 
+      case 'admin': return <AdminDashboard setView={setCurrentView} />; // Route Admin
       default: return <DashboardHome setView={setCurrentView} />;
     }
   };
@@ -49,9 +45,7 @@ export const AppContainer = ({ isDarkMode, toggleDarkMode, onLogout }: AppContai
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-black font-sans text-gray-900 dark:text-gray-100 overflow-hidden transition-colors duration-300">
       
-      {/* Widget Global */}
       <PomodoroWidget />
-      <OnboardingTour />
 
       <Sidebar 
         currentView={currentView} 
@@ -74,7 +68,6 @@ export const AppContainer = ({ isDarkMode, toggleDarkMode, onLogout }: AppContai
         </main>
       </div>
 
-      {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 md:hidden" onClick={() => setMobileMenuOpen(false)}>
           <div className="absolute left-0 top-0 bottom-0 w-3/4 bg-white dark:bg-gray-900 p-6 shadow-2xl flex flex-col" onClick={e => e.stopPropagation()}>
