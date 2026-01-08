@@ -9,8 +9,9 @@ import { AdminDashboard } from '../admin/AdminDashboard';
 import { X } from 'lucide-react';
 import { Button } from '../ui/Button';
 import { PomodoroWidget } from './PomodoroWidget';
-import { OnboardingTour } from './OnboardingTour'; // Import Baru
+import { OnboardingTour } from './OnboardingTour';
 
+// Definisikan tipe lokal di sini agar tidak perlu mengimpor dari file luar yang sedang error
 type ToastType = 'success' | 'error' | 'info';
 
 interface AppContainerProps {
@@ -24,11 +25,12 @@ export const AppContainer = ({ isDarkMode, toggleDarkMode, onLogout }: AppContai
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isPro, setIsPro] = useState(true); 
 
+  // Fallback function menggunakan alert standar browser agar build stabil
   const handleAddToast = (msg: string, type: ToastType) => {
     if (type === 'error') {
-      alert(`⚠️ ${msg}`);
+      alert(`⚠️ Error: ${msg}`);
     } else {
-      alert(`✅ ${msg}`);
+      alert(`✅ Success: ${msg}`);
     }
   };
 
@@ -38,7 +40,7 @@ export const AppContainer = ({ isDarkMode, toggleDarkMode, onLogout }: AppContai
       case 'osce': return <OSCESection isPro={isPro} />; 
       case 'cbt': return <CBTSection isPro={isPro} addToast={handleAddToast} />; 
       case 'flashcards': return <FlashcardSection isPro={isPro} addToast={handleAddToast} />; 
-      // @ts-ignore
+      // @ts-ignore - Mengabaikan cek tipe data sementara untuk AdminDashboard
       case 'admin': return <AdminDashboard setView={setCurrentView} addToast={handleAddToast} />; 
       default: return <DashboardHome setView={setCurrentView} />;
     }
@@ -47,22 +49,18 @@ export const AppContainer = ({ isDarkMode, toggleDarkMode, onLogout }: AppContai
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-black font-sans text-gray-900 dark:text-gray-100 overflow-hidden transition-colors duration-300">
       
-      {/* GLOBAL WIDGETS */}
+      {/* Widget Global */}
       <PomodoroWidget />
       <OnboardingTour />
 
-      {/* SIDEBAR DESKTOP */}
-      <div className="hidden md:flex w-72 h-full border-r border-gray-100 dark:border-gray-800">
-        <Sidebar 
-          currentView={currentView} 
-          setView={setCurrentView} 
-          onLogout={onLogout}
-          isPro={isPro}
-          onUpgrade={() => handleAddToast("Fitur Upgrade akan segera hadir!", "info")}
-        />
-      </div>
+      <Sidebar 
+        currentView={currentView} 
+        setView={setCurrentView} 
+        onLogout={onLogout}
+        isPro={isPro}
+        onUpgrade={() => handleAddToast("Fitur Upgrade akan segera hadir!", "info")}
+      />
 
-      {/* MAIN CONTENT */}
       <div className="flex-1 flex flex-col h-full overflow-hidden relative">
         <AppHeader 
           isDarkMode={isDarkMode} 
@@ -76,29 +74,28 @@ export const AppContainer = ({ isDarkMode, toggleDarkMode, onLogout }: AppContai
         </main>
       </div>
 
-      {/* SIDEBAR MOBILE (OVERLAY) */}
+      {/* Mobile Menu Drawer */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-50 bg-black/50 md:hidden" onClick={() => setMobileMenuOpen(false)}>
-          <div 
-            className="absolute left-0 top-0 bottom-0 w-3/4 max-w-xs bg-white dark:bg-gray-900 shadow-2xl flex flex-col animate-fade-in-right" // Animasi slide-in bisa ditambahkan di global css
-            onClick={e => e.stopPropagation()}
-          >
-             {/* Tombol Close Mobile */}
-             <div className="absolute top-4 right-4 z-50">
-               <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
-                  <X className="w-6 h-6"/>
-               </Button>
+          <div className="absolute left-0 top-0 bottom-0 w-3/4 bg-white dark:bg-gray-900 p-6 shadow-2xl flex flex-col" onClick={e => e.stopPropagation()}>
+             <div className="flex justify-between items-center mb-8">
+                <div className="font-bold text-xl text-teal-700">MedPrep</div>
+                <Button variant="ghost" size="icon" onClick={() => setMobileMenuOpen(false)}>
+                  <X className="w-5 h-5"/>
+                </Button>
              </div>
-
-             {/* Re-use Sidebar Component */}
-             <Sidebar 
-                currentView={currentView} 
-                setView={setCurrentView} 
-                onLogout={onLogout}
-                isPro={isPro}
-                onUpgrade={() => handleAddToast("Fitur Upgrade!", "info")}
-                onCloseMobile={() => setMobileMenuOpen(false)} // Pass fungsi close
-             />
+             <nav className="flex-1 space-y-2">
+               {['home', 'osce', 'cbt', 'flashcards', 'admin'].map(v => (
+                 <button 
+                   key={v} 
+                   onClick={() => { setCurrentView(v); setMobileMenuOpen(false); }} 
+                   className={`w-full text-left p-3 rounded-lg font-bold capitalize ${currentView === v ? 'bg-teal-50 text-teal-600' : 'text-gray-500'}`}
+                 >
+                   {v}
+                 </button>
+               ))}
+             </nav>
+             <Button onClick={onLogout} variant="outline" className="mt-auto">Keluar</Button>
           </div>
         </div>
       )}

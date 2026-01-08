@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
-// Pastikan path import ini benar mengarah ke file di Langkah 1
-import { ToastMessage, ToastType } from '../ui/Toast';
+// Pastikan path import ini benar mengarah ke src/ui/Toast.tsx
+import { ToastMessage, ToastType } from '../components/ui/Toast';
 
 export const useToast = () => {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
@@ -9,7 +9,7 @@ export const useToast = () => {
     const id = Date.now();
     setToasts((prev) => [...prev, { id, message, type }]);
 
-    // Auto remove after 3 seconds
+    // Otomatis hapus setelah 3 detik
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
     }, 3000);

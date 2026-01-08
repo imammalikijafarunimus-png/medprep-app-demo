@@ -1,7 +1,7 @@
 import React from 'react';
 import { CheckCircle, AlertCircle, Info, X } from 'lucide-react';
 
-// Pastikan baris ini ada agar bisa diimport file lain
+// --- PENTING: Export semua tipe ini agar bisa dibaca useToast.ts ---
 export type ToastType = 'success' | 'error' | 'info';
 
 export interface ToastMessage {
