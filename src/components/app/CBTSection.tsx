@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from 'react';
 import { 
   BookOpen, Lock, ChevronRight, Hash, HelpCircle, CheckCircle, XCircle, RotateCcw, Trophy 

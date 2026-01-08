@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import { 
   Activity, BarChart2, Brain, Flame, Calendar, ArrowRight, Zap, BookOpen 

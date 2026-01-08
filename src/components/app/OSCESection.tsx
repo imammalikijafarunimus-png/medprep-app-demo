@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
 import { 
   Search, ChevronRight, Timer, Flag, ImageIcon, Activity, Brain, 

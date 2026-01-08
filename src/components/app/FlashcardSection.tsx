@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useMemo } from 'react';
 import { Zap, Lock, ImageIcon, ArrowLeft, Layers, CheckCircle, Clock } from 'lucide-react'; // Added Clock
 import { Badge } from '../ui/Badge';
