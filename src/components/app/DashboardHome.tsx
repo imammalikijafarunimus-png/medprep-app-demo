@@ -1,6 +1,6 @@
-"use client";
+"use client"; // Pastikan ini ada
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { 
   Activity, BarChart2, Brain, Flame, Calendar, ArrowRight, Zap, BookOpen 
 } from 'lucide-react';
